@@ -33,25 +33,22 @@ jobs:
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
       - name: Notify success on Discord
         if: ${{ success() }}
-        uses: rjstone/discord-webhook-notify@v2
+        uses: sarisia/actions-status-discord@v1
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          severity: info
-          description: |
-            A new version of Pokedex deployed
-
-            to https://pdex.fly.dev/ by ${{ github.actor }}
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          nodetail: true
+          status: ${{ job.status }}
+          content: A new version of Pokedex deployed
+          description: to https://pdex.fly.dev/ by ${{ github.actor }}
       - name: Notify failure on Discord
         if: ${{ failure() }}
-        uses: rjstone/discord-webhook-notify@v2
+        uses: sarisia/actions-status-discord@v1
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          severity: error
-          description: |
-            Build failed
-
-            commit
-            https://github.com/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :(
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          nodetail: true
+          status: ${{ job.status }}
+          content: Build failed
+          description: commit https://github.com/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :(
 
   tag_release:
     needs: [simple_deployment_pipeline]
