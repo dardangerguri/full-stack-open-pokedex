@@ -1,0 +1,17 @@
+name: Health Check
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  health_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the deployed website
+        uses: jtalk/url-health-check-action@b716ccb6645355dd9fcce8002ce460e5474f7f00
+        with:
+          url: https://full-stack-open-pokedex-1-gp4o.onrender.com/health
+          max-attempts: 3
+          retry-delay: 5s
