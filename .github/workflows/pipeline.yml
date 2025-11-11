@@ -31,6 +31,24 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '#skip') }}
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
+      - name: Notify success on Discord
+        if: ${{ success() }}
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          nodetail: true
+          status: ${{ job.status }}
+          content: A new version of Pokedex deployed
+          description: to https://pdex.fly.dev/ by ${{ github.actor }}
+      - name: Notify failure on Discord
+        if: ${{ failure() }}
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          nodetail: true
+          status: ${{ job.status }}
+          content: Build failed
+          description: commit https://github.com/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :(
 
   tag_release:
     needs: [simple_deployment_pipeline]
