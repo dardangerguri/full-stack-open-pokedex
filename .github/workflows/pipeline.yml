@@ -39,7 +39,7 @@ jobs:
           nodetail: true
           status: ${{ job.status }}
           content: A new version of Pokedex deployed
-          description: to https://pdex.fly.dev/ by ${{ github.actor }}
+          description: to https://full-stack-open-pokedex-1-gp4o.onrender.com by ${{ github.actor }}
       - name: Notify failure on Discord
         if: ${{ failure() }}
         uses: sarisia/actions-status-discord@v1
