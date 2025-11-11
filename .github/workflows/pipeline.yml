@@ -31,6 +31,20 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '#skip') }}
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
+      - name: Notify success on Discord
+        if: ${{ success() }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d '{"content": "A new version of Pokedex deployed\n\nto https://pdex.fly.dev/ by ${{ github.actor }}"}' \
+          ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Notify failure on Discord
+        if: ${{ failure() }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d '{"content": "Build failed\n\ncommit\nhttps://github.com/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :(' \
+          ${{ secrets.DISCORD_WEBHOOK }}
 
   tag_release:
     needs: [simple_deployment_pipeline]
