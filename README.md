@@ -13,3 +13,10 @@ Start by running `npm install` inside the project folder
 `npm run eslint` to run eslint
 `npm run build` to make a production build
 `npm run start-prod` to run your production build
+
+# Link to the exercises 11.20 and 11.21:
+
+- https://github.com/dardangerguri/FullStackOpen-Part11
+
+# Pokedox application
+- **Live Deployment:** https://full-stack-open-pokedex-1-gp4o.onrender.com
